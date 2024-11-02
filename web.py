@@ -21,6 +21,4 @@ for index, todo in enumerate(todoList):
         sl.rerun()
 
 sl.text_input(label=" ", placeholder="Add new todo...",
-              on_change=add_todo, key="new_todo",
-              label_visibility="collapsed")
-sl.session_state
+              on_change=add_todo, key="new_todo")
