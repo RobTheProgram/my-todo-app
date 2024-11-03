@@ -24,7 +24,7 @@ def remove_todo(index):
 
 #Display each todo with a delete button aligned next to it
 for index, todo in enumerate(sl.session_state["todoList"]):
-    cols = sl.columns([0.8, 0.2])
+    cols = sl.columns([0.8, 0.2], key=f"row_{index}")
     #Creates a unique ID for each todo_item via index
     with cols[0]:
         sl.write(todo)
