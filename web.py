@@ -29,5 +29,5 @@ for index, todo in enumerate(sl.session_state["todoList"]):
         remove_todo(index)
 
 #The input text field with all of its properties
-sl.text_input(label=" ", placeholder="Add new todo...",
+sl.text_input(label="", placeholder="Add new todo...",
               on_change=add_todo, key="new_todo")
