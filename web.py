@@ -22,8 +22,9 @@ def remove_todo(index):
     sl.session_state["todoList"].pop(index)
     functions.write_todoList(sl.session_state["todoList"])
 
-#In the event that a checkbox is checked or "True" in boolean, it calls the remove_todo method
+#In the event that a button is pressed, it calls the remove_todo method
 for index, todo in enumerate(sl.session_state["todoList"]):
+    #Creates a unique ID for each todo_item via index
     sl.write(f"{todo}", key=f"todo_{index}")
     #This pinpoints the exact index of the checkbox which each have their own unique ID
     if sl.button("Delete", key=f"delete_{index}"):
