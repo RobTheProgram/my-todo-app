@@ -22,14 +22,17 @@ def remove_todo(index):
     sl.session_state["todoList"].pop(index)
     functions.write_todoList(sl.session_state["todoList"])
 
-#In the event that a button is pressed, it calls the remove_todo method
+#Display each todo with a delete button aligned next to it
 for index, todo in enumerate(sl.session_state["todoList"]):
+    cols = sl.columns([0.8, 0.2])
     #Creates a unique ID for each todo_item via index
-    sl.write(f"{todo}", key=f"todo_{index}")
-    #This pinpoints the exact index of the checkbox which each have their own unique ID
-    if sl.button("Delete", key=f"delete_{index}"):
-        remove_todo(index)
-        sl.rerun()
+    with cols[0]:
+        sl.write(todo)
+    #Creates the column for buttons
+    with cols[1]:
+        if sl.button("Delete", key=f"delete_{index}"):
+            remove_todo(index)
+            sl.rerun()
 
 #The input text field with all of its properties
 sl.text_input(label=" ", placeholder="Add new todo...",
