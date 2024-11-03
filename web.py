@@ -15,7 +15,7 @@ def add_todo():
     sl.session_state["todoList"].append(sl.session_state["new_todo"] + '\n')
     functions.write_todoList(sl.session_state["todoList"])
     #Resets the input text field to an empty default state for user convenience
-    sl.session_state["new_todo"] = ""
+    sl.session_state["new_todo"] = " "
 
 #Removes a todo via list index and updates the session accordingly
 def remove_todo(index):
