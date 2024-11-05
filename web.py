@@ -10,21 +10,17 @@ sl.write("This app is to increase your productivity and to keep track of your pr
 if "todoList" not in sl.session_state:
     sl.session_state["todoList"] = functions.read_todoList()
 
-# Trigger rerun state variable to refresh after delete
-if "trigger_rerun" not in sl.session_state:
-    sl.session_state["trigger_rerun"] = False
-
-# Add a todo to the list and update session state
+# Adds a todo to the list and updates session state
 def add_todo():
     sl.session_state["todoList"].append(sl.session_state["new_todo"].strip() + '\n')
     functions.write_todoList(sl.session_state["todoList"])
     sl.session_state["new_todo"] = ""  # Clear input field
 
-# Remove a todo by text content to avoid index issues and trigger rerun
+# Remove a todo by text content to avoid index issues
 def remove_todo_by_text(todo_text):
+    # Rebuild todo list without the deleted item
     sl.session_state["todoList"] = [todo for todo in sl.session_state["todoList"] if todo != todo_text]
     functions.write_todoList(sl.session_state["todoList"])
-    sl.session_state["trigger_rerun"] = not sl.session_state["trigger_rerun"]  # Flip state to force rerun
 
 # Display each todo with a delete button aligned next to it
 for todo in sl.session_state["todoList"]:
@@ -35,10 +31,9 @@ for todo in sl.session_state["todoList"]:
         # Use todo text as the unique key to avoid index mismatch
         if sl.button("Delete", key=f"delete_{todo}"):
             remove_todo_by_text(todo)
-
-# Dummy input field that triggers rerun based on `trigger_rerun` state
-if sl.session_state["trigger_rerun"]:
-    sl.empty()  # Placeholder element that resets on trigger
+            # Trigger a fresh rerun by clearing and updating session state
+            del sl.session_state["todoList"]
+            sl.experimental_rerun()  # Force rerun to refresh UI after deletion
 
 # Input field for adding new todos
 sl.text_input(label=" ", placeholder="Add new todo...",
