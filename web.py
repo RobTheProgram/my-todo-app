@@ -21,6 +21,8 @@ def remove_todo_by_text(todo_text):
     # Rebuild todo list without the deleted item
     sl.session_state["todoList"] = [todo for todo in sl.session_state["todoList"] if todo != todo_text]
     functions.write_todoList(sl.session_state["todoList"])
+    del sl.session_state["todoList"]  # Clear the todoList in session state
+    sl.rerun()  # Force rerun to refresh UI after deletion
 
 # Display each todo with a delete button aligned next to it
 for todo in sl.session_state["todoList"]:
@@ -31,9 +33,6 @@ for todo in sl.session_state["todoList"]:
         # Use todo text as the unique key to avoid index mismatch
         if sl.button("Delete", key=f"delete_{todo}"):
             remove_todo_by_text(todo)
-            # Trigger a fresh rerun by clearing and updating session state
-            del sl.session_state["todoList"]
-            sl.rerun()  # Force rerun to refresh UI after deletion
 
 # Input field for adding new todos
 sl.text_input(label=" ", placeholder="Add new todo...",
