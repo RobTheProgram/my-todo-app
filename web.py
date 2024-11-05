@@ -19,9 +19,14 @@ def add_todo():
 
 def remove_todo(index):
     # Remove the todo at the specified index and update the stored list
-    updated_todo_list = [todo for i, todo in enumerate(sl.session_state["todoList"]) if i != index]
-    sl.session_state["todoList"] = updated_todo_list
-    functions.write_todoList(updated_todo_list)
+    del sl.session_state["todoList"][index]
+    functions.write_todoList(sl.session_state["todoList"])
+
+    for i in range(len(sl.session_state["todoList"]) + 1):
+        delete_key = f"delete_{i}"
+        if delete_key in sl.session_state:
+            del sl.session_state[delete_key]
+    
     sl.rerun()  # Rerun after deletion to update UI
 
     
