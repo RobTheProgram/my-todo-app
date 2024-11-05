@@ -6,10 +6,6 @@ sl.title("Todo Web Application")
 sl.subheader("This is my todo app!")
 sl.write("This app is to increase your productivity and to keep track of your progress!")
 
-# Input field for adding new todos
-sl.text_input(label=" ", placeholder="Add new todo...",
-              on_change=add_todo, key="new_todo")
-
 # Load todo list into session state if not already present
 if "todoList" not in sl.session_state:
     sl.session_state["todoList"] = functions.read_todoList()
@@ -27,6 +23,10 @@ def remove_todo_by_text(todo_text):
     functions.write_todoList(sl.session_state["todoList"])
     del sl.session_state["todoList"]  # Clear the todoList in session state
     sl.rerun()  # Force rerun to refresh UI after deletion
+
+# Input field for adding new todos
+sl.text_input(label=" ", placeholder="Add new todo...",
+              on_change=add_todo, key="new_todo")
 
 # Display each todo with a delete button aligned next to it
 for todo in sl.session_state["todoList"]:
