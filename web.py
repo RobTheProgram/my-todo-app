@@ -6,32 +6,24 @@ sl.title("Todo Web Application")
 sl.subheader("This is my todo app!")
 sl.write("This app is to increase your productivity and to keep track of your progress!")
 
-#Displays the todo list into the session if it isn't already present
-if "todoList" not in sl.session_state:
-    sl.session_state["todoList"] = functions.read_todoList()
+# Reload todo list on each run
+todoList = functions.read_todoList()
 
-#Adds a todo at the end of the list and updates the session
+# Adds a todo to the end of the list and updates the file
 def add_todo():
-    sl.session_state["todoList"].append(sl.session_state["new_todo"] + '\n')
-    functions.write_todoList(sl.session_state["todoList"])
-    #Resets the input text field to an empty default state for user convenience
-    sl.session_state["new_todo"] = " "
+    todoList.append(sl.session_state["new_todo"] + '\n')
+    functions.write_todoList(todoList)
+    sl.session_state["new_todo"] = ""  # Clear the input field
+    sl.rerun()  # Rerun to display updated list
 
-def remove_todo(index):
-    # Remove the todo at the specified index and update the stored list
-    del sl.session_state["todoList"][index]
-    functions.write_todoList(sl.session_state["todoList"])
-
-    for i in range(len(sl.session_state["todoList"]) + 1):
-        delete_key = f"delete_{i}"
-        if delete_key in sl.session_state:
-            del sl.session_state[delete_key]
-    
-    sl.rerun()  # Rerun after deletion to update UI
-
+# Remove a todo at the specified index and update the file
+def remove_todo_at_index(index):
+    todoList.pop(index)
+    functions.write_todoList(todoList)
+    sl.rerun()  # Rerun to refresh UI after deletion
     
 #Display each todo with a delete button aligned next to it
-for index, todo in enumerate(sl.session_state["todoList"]):
+for index, todo in enumerate(todoList):
     cols = sl.columns([0.8, 0.2])
     #Creates a unique ID for each todo_item via index
     with cols[0]:
@@ -39,7 +31,7 @@ for index, todo in enumerate(sl.session_state["todoList"]):
     #Creates the column for buttons
     with cols[1]:
         if sl.button("Delete", key=f"delete_{index}"):
-            remove_todo(index)
+            remove_todo_at_index(index)
 
 
 #The input text field with all of its properties
