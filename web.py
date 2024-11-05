@@ -21,6 +21,8 @@ def remove_todo(index):
     # Remove the todo at the specified index and update the stored list
     sl.session_state["todoList"].pop(index)
     functions.write_todoList(sl.session_state["todoList"])
+    sl.rerun()  # Rerun after deletion to update UI
+
     
 #Display each todo with a delete button aligned next to it
 for index, todo in enumerate(sl.session_state["todoList"]):
@@ -30,11 +32,8 @@ for index, todo in enumerate(sl.session_state["todoList"]):
         sl.write(todo)
     #Creates the column for buttons
     with cols[1]:
-        #Wrap delete button in a form to ensure it resets on click
-        with sl.form(key=f"delete_form_{index}"):
-            if sl.form_submit_button("Delete"):
-                remove_todo(index)
-                sl.rerun()  # Rerun after deletion to update UI
+        if sl.button("Delete", key=f"delete_{index}"):
+            remove_todo(index)
 
 
 #The input text field with all of its properties
