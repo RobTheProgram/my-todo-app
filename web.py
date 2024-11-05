@@ -33,7 +33,7 @@ for todo in sl.session_state["todoList"]:
             remove_todo_by_text(todo)
             # Trigger a fresh rerun by clearing and updating session state
             del sl.session_state["todoList"]
-            sl.experimental_rerun()  # Force rerun to refresh UI after deletion
+            sl.rerun()  # Force rerun to refresh UI after deletion
 
 # Input field for adding new todos
 sl.text_input(label=" ", placeholder="Add new todo...",
